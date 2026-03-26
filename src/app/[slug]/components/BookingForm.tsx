@@ -43,6 +43,10 @@ export default function BookingForm({ professional }: BookingFormProps) {
   // Customer state
   const [customerName, setCustomerName] = useState("");
   const [customerPhone, setCustomerPhone] = useState("");
+
+  // Input helpers — [A-02, A-04]
+  const PHONE_REGEX = /^\(?\d{2}\)?[\s-]?\d{4,5}[\s-]?\d{4}$/;
+  const sanitize = (str: string, maxLen = 100) => str.trimStart().slice(0, maxLen);
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
@@ -118,6 +122,24 @@ export default function BookingForm({ professional }: BookingFormProps) {
   async function handleCompleteBooking() {
     if (!selectedService || !selectedDate || !selectedTime || !customerName || !customerPhone) return;
 
+    // --- Input validation [A-02] ---
+    if (customerName.trim().length < 2) {
+      toast.error("Por favor, informe seu nome completo (mínimo 2 caracteres).");
+      return;
+    }
+    if (!PHONE_REGEX.test(customerPhone.replace(/\s/g, ""))) {
+      toast.error("Telefone inválido. Use o formato (11) 98765-4321.");
+      return;
+    }
+
+    // --- Basic rate limiting [A-04] — 1 booking per professional per 60s ---
+    const BOOKING_KEY = `bf_booked_${professional.uid}`;
+    const lastBooking = sessionStorage.getItem(BOOKING_KEY);
+    if (lastBooking && Date.now() - Number(lastBooking) < 60_000) {
+      toast.error("Aguarde 1 minuto antes de fazer outro agendamento.");
+      return;
+    }
+
     setSubmitting(true);
     try {
       const [sh, sm] = selectedTime.split(":").map(Number);
@@ -133,11 +155,13 @@ export default function BookingForm({ professional }: BookingFormProps) {
         startTime: selectedTime,
         endTime,
         guestClient: {
-          name: customerName,
-          phone: customerPhone,
+          name: customerName.trim(),
+          phone: customerPhone.trim(),
         },
         status: "CONFIRMED",
       });
+      // Mark booking time for rate limiting
+      sessionStorage.setItem(`bf_booked_${professional.uid}`, String(Date.now()));
       setStep("success");
       toast.success("Agendamento realizado com sucesso!");
     } catch (error) {
@@ -309,8 +333,10 @@ export default function BookingForm({ professional }: BookingFormProps) {
               </Label>
               <input
                 value={customerName}
-                onChange={(e) => setCustomerName(e.target.value)}
+                onChange={(e) => setCustomerName(sanitize(e.target.value))}
                 placeholder="Ex: Maria Oliveira"
+                maxLength={100}
+                autoComplete="name"
                 className="w-full bg-white/50 border-white/20 rounded-xl px-4 py-4 focus:ring-2 focus:ring-black outline-none transition-all placeholder:text-neutral-300 font-semibold"
               />
             </div>
@@ -321,8 +347,11 @@ export default function BookingForm({ professional }: BookingFormProps) {
               <input
                 type="tel"
                 value={customerPhone}
-                onChange={(e) => setCustomerPhone(e.target.value)}
+                onChange={(e) => setCustomerPhone(sanitize(e.target.value, 20))}
                 placeholder="(11) 98765-4321"
+                maxLength={20}
+                autoComplete="tel"
+                pattern="[0-9\s\-\(\)]+"
                 className="w-full bg-white/50 border-white/20 rounded-xl px-4 py-4 focus:ring-2 focus:ring-black outline-none transition-all placeholder:text-neutral-300 font-semibold"
               />
             </div>

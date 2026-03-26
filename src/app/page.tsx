@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, PlayCircle, Star, Award } from "lucide-react";
+import LoopingVideo from "@/components/LoopingVideo";
 
 export default function Home() {
   return (
@@ -93,13 +94,9 @@ export default function Home() {
 
                   {/* Main Video element */}
                   <div className="w-full h-full bg-gradient-to-br from-white to-neutral-200 rounded-[40px] shadow-glass border-8 border-white/50 relative overflow-hidden flex items-center justify-center z-20">
-                     <video 
+                     <LoopingVideo
                        src="/videos/hero.mp4"
-                       autoPlay 
-                       muted 
-                       loop 
-                       playsInline
-                       className="w-full h-full object-cover"
+                       className="object-cover"
                      />
                   </div>
                </div>

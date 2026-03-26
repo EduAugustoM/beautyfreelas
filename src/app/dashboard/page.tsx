@@ -5,6 +5,7 @@ import { useEffect, useState, useMemo } from "react";
 import { getServicesByProfessional, getUpcomingAppointments, getProfessionalById } from "@/lib/db";
 import type { BeautyService, Appointment, Professional } from "@/lib/db";
 import { Users, Calendar, Scissors, TrendingUp } from "lucide-react";
+import SkeletonCard from "@/components/SkeletonCard";
 
 export default function DashboardPage() {
   const { user } = useAuth();
@@ -118,12 +119,12 @@ export default function DashboardPage() {
 
   if (loading) {
     return (
-      <div className="flex flex-col gap-8 animate-pulse">
-        <div className="h-10 w-64 bg-white/20 rounded-xl" />
+      <div className="flex flex-col gap-8">
+        <div className="skeleton h-10 w-64 rounded-xl" />
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-          {[1, 2, 3, 4].map(i => <div key={i} className="h-32 bg-white/20 rounded-3xl" />)}
+          {[1, 2, 3, 4].map(i => <div key={i} className="skeleton h-32 rounded-3xl" />)}
         </div>
-        <div className="h-96 bg-white/20 rounded-3xl" />
+        <div className="skeleton h-96 rounded-3xl" />
       </div>
     );
   }

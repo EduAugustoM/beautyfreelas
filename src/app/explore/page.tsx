@@ -4,7 +4,9 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { getAllProfessionals } from "@/lib/db";
 import type { Professional } from "@/lib/db";
-import { User, MapPin, Star, ArrowRight, Search } from "lucide-react";
+import { User, Star, ArrowRight, Search } from "lucide-react";
+import SkeletonCard from "@/components/SkeletonCard";
+
 
 export default function ExplorePage() {
   const [professionals, setProfessionals] = useState<Professional[]>([]);
@@ -70,11 +72,12 @@ export default function ExplorePage() {
         </div>
 
         {loading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-pulse">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[1, 2, 3, 4, 5, 6].map((i) => (
-              <div key={i} className="h-80 bg-white/40 rounded-[2.5rem]" />
+              <SkeletonCard key={i} variant="professional-card" />
             ))}
           </div>
+
         ) : filteredProfessionals.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredProfessionals.map((prof, idx) => (
@@ -96,9 +99,7 @@ export default function ExplorePage() {
                 
                 <h3 className="text-xl font-bold tracking-tight mb-1">{prof.name}</h3>
                 
-                <div className="flex items-center justify-center gap-1 text-[10px] font-black uppercase tracking-widest text-neutral-400 mb-4 bg-white/50 px-3 py-1 rounded-full">
-                  <MapPin className="h-3 w-3" /> São Paulo, SP
-                </div>
+
 
                 <p className="text-sm text-neutral-500 font-medium line-clamp-2 mb-6 flex-grow px-2">
                   {prof.description || "Especialista em beleza e bem-estar, dedicado a realçar sua melhor versão."}

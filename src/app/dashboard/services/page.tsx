@@ -50,12 +50,29 @@ export default function ServicesPage() {
     e.preventDefault();
     if (!user) return;
 
+    // --- Input validation [A-03] ---
+    const trimmedName = name.trim();
+    if (trimmedName.length < 2 || trimmedName.length > 100) {
+      toast.error("Nome do serviço deve ter entre 2 e 100 caracteres.");
+      return;
+    }
+    const parsedPrice = parseFloat(price);
+    if (isNaN(parsedPrice) || parsedPrice <= 0 || parsedPrice > 10_000) {
+      toast.error("Preço inválido. Deve ser entre R$ 0,01 e R$ 10.000,00.");
+      return;
+    }
+    const parsedDuration = parseInt(duration, 10);
+    if (isNaN(parsedDuration) || parsedDuration < 5 || parsedDuration > 480) {
+      toast.error("Duração inválida. Deve ser entre 5 e 480 minutos.");
+      return;
+    }
+
     try {
       await addService({
         professionalId: user.uid,
-        name,
-        price: Number(price),
-        durationMinutes: Number(duration),
+        name: trimmedName,
+        price: parsedPrice,
+        durationMinutes: parsedDuration,
       });
       
       const updated = await getServicesByProfessional(user.uid);
@@ -72,11 +89,13 @@ export default function ServicesPage() {
     }
   }
 
+
   async function handleDelete(id: string) {
     if (!user || !confirm("Deseja realmente excluir este serviço?")) return;
 
     try {
-      await deleteService(id);
+      await deleteService(id, user.uid);
+
       setServices(services.filter((s) => s.id !== id));
       toast.success("Serviço removido.");
     } catch (error) {
