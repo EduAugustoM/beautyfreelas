@@ -297,20 +297,20 @@ export default function BookingForm({ professional }: BookingFormProps) {
               )}
             </div>
 
-            <div className="pt-6 flex gap-4">
+            <div className="pt-6 flex gap-3 sm:gap-4">
               <button 
                 onClick={() => setStep("service")}
                 className="p-4 rounded-2xl bg-white/40 text-neutral-500 hover:bg-white hover:text-black transition-all"
               >
-                <ChevronLeft className="h-6 w-6" />
+                <ChevronLeft className="h-5 w-5 sm:h-6 sm:w-6" />
               </button>
               <button
                 disabled={!selectedDate || !selectedTime}
                 onClick={() => setStep("customer")}
-                className="btn-primary flex-1 py-4 rounded-2xl flex items-center justify-center gap-2 font-bold disabled:opacity-50 disabled:cursor-not-allowed"
+                className="btn-primary flex-1 py-4 rounded-2xl flex items-center justify-center gap-2 font-bold disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
               >
                 Próximo Passo
-                <ChevronRight className="h-5 w-5" />
+                <ChevronRight className="h-4 w-4 sm:h-5 sm:w-5" />
               </button>
             </div>
           </div>
@@ -371,20 +371,20 @@ export default function BookingForm({ professional }: BookingFormProps) {
               </div>
             </div>
 
-            <div className="flex gap-4">
+            <div className="flex flex-col-reverse sm:flex-row gap-3 sm:gap-4">
               <button 
                 onClick={() => setStep("date")}
-                className="p-4 rounded-2xl bg-black/5 text-neutral-500 hover:bg-black/10 transition-all font-bold"
+                className="w-full sm:w-auto p-4 rounded-2xl bg-black/5 text-neutral-500 hover:bg-black/10 transition-all font-bold text-sm sm:text-base"
               >
                 Voltar
               </button>
               <button
                 disabled={submitting || !customerName || !customerPhone}
                 onClick={handleCompleteBooking}
-                className="btn-primary flex-1 py-4 rounded-xl flex items-center justify-center gap-2 font-bold"
+                className="w-full sm:flex-1 btn-primary py-4 rounded-xl flex items-center justify-center gap-2 font-bold text-sm sm:text-base"
               >
                 {submitting ? "Finalizando..." : "Confirmar Agendamento"}
-                <Check className="h-5 w-5" />
+                <Check className="h-4 w-4 sm:h-5 sm:w-5" />
               </button>
             </div>
           </div>
@@ -404,19 +404,19 @@ export default function BookingForm({ professional }: BookingFormProps) {
           Seu agendamento com <span className="text-black font-bold">{professional.name}</span> foi confirmado. Entraremos em contato no WhatsApp informado em breve.
         </p>
         
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
           <button 
             onClick={() => setStep("service")}
-            className="px-8 py-4 rounded-2xl bg-white text-black border border-neutral-200 font-bold hover:bg-neutral-50 transition-all shadow-sm"
+            className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-white text-black border border-neutral-200 font-bold hover:bg-neutral-50 transition-all shadow-sm text-sm sm:text-base"
           >
             Fazer outro agendamento
           </button>
           <button 
-            className="btn-primary px-8 py-4 rounded-2xl flex items-center justify-center gap-2 font-bold"
+            className="w-full sm:w-auto btn-primary px-8 py-4 rounded-2xl flex items-center justify-center gap-2 font-bold text-sm sm:text-base"
             onClick={() => window.location.href = "/"}
           >
             Voltar ao Início
-            <ArrowRight className="h-5 w-5" />
+            <ArrowRight className="h-4 w-4 sm:h-5 sm:w-5" />
           </button>
         </div>
       </div>

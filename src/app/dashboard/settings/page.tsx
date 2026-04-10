@@ -1,11 +1,12 @@
 "use client";
 
 import { useAuth } from "@/contexts/AuthContext";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { getProfessionalById, saveProfessional } from "@/lib/db";
+
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { User, AtSign, Phone, Globe, Briefcase, Camera } from "lucide-react";
+import { User, AtSign, Phone, Globe, Briefcase } from "lucide-react";
 
 export default function SettingsPage() {
   const { user } = useAuth();
@@ -38,6 +39,8 @@ export default function SettingsPage() {
     }
     loadProfessional();
   }, [user]);
+
+
 
   async function handleSave(e: React.FormEvent) {
     e.preventDefault();
@@ -87,14 +90,11 @@ export default function SettingsPage() {
                 <div className="relative group">
                   <div className="w-40 h-40 rounded-full bg-neutral-100 flex items-center justify-center border-4 border-white shadow-card overflow-hidden">
                     {user?.photoURL ? (
-                      <img src={user.photoURL} alt={name} className="w-full h-full object-cover" />
+                      <img src={user.photoURL} alt={name || "Perfil"} className="w-full h-full object-cover" />
                     ) : (
                       <User className="h-20 w-20 text-neutral-300" />
                     )}
                   </div>
-                  <button type="button" className="absolute bottom-1 right-1 p-3 bg-black text-white rounded-full shadow-button hover:scale-110 transition-transform">
-                    <Camera className="h-5 w-5" />
-                  </button>
                 </div>
                 <h3 className="mt-6 font-bold text-xl tracking-tight">{name || "Seu Nome"}</h3>
                 <p className="text-sm text-neutral-400 font-medium">{user?.email}</p>
