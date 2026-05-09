@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, PlayCircle, Star, Award } from "lucide-react";
+import { ArrowRight, PlayCircle, Star, Award, HelpCircle } from "lucide-react";
 import LoopingVideo from "@/components/LoopingVideo";
 
 export default function Home() {
@@ -38,7 +38,7 @@ export default function Home() {
               </p>
 
               {/* Actions */}
-              <div className="flex flex-col sm:flex-row gap-4 animate-slide-up animate-delay-600">
+              <div className="flex flex-col sm:flex-row gap-4 mb-6 animate-slide-up animate-delay-600">
                 <Link href="/login">
                   <span className="btn-primary cursor-pointer w-full sm:w-auto">
                     <Award className="w-5 h-5" />
@@ -52,6 +52,18 @@ export default function Home() {
                     Sou Cliente
                     <ArrowRight className="w-4 h-4" />
                   </span>
+                </Link>
+              </div>
+
+              {/* How it works link */}
+              <div className="animate-slide-up animate-delay-700">
+                <Link
+                  href="/como-funciona"
+                  className="inline-flex items-center gap-2 text-sm font-semibold text-neutral-500 hover:text-neutral-900 transition-colors group"
+                >
+                  <HelpCircle className="w-4 h-4 group-hover:text-rose-500 transition-colors" />
+                  Como funciona?
+                  <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                 </Link>
               </div>
 
