@@ -17,6 +17,7 @@ import {
   Award,
   Star,
   Sparkles,
+  Play,
 } from "lucide-react";
 
 const professionalSteps = [
@@ -275,6 +276,65 @@ export default function ComoFuncionaPage() {
                   )}
                 </div>
               ))}
+            </div>
+
+            {/* Divider */}
+            <div className="my-8 border-t border-black/5" />
+
+            {/* Tutoriais em Vídeo Section */}
+            <div className="text-center">
+              <h3 className="text-lg font-black tracking-tight mb-6 flex items-center justify-center gap-2">
+                <Play className="h-5 w-5 fill-rose-500 text-rose-500" />
+                Assista ao Tutorial
+              </h3>
+              
+              <div key={activeTab} className="max-w-3xl mx-auto animate-fade-in">
+                {activeTab === "client" ? (
+                  /* Client Video */
+                  <div className="bg-white/40 backdrop-blur-md rounded-3xl p-5 md:p-6 border border-white/60 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col">
+                    <div className="flex items-center justify-center gap-2.5 mb-4">
+                      <div className="p-2 bg-rose-50 rounded-xl text-rose-500">
+                        <Smartphone className="h-4 w-4" />
+                      </div>
+                      <div className="text-left">
+                        <h4 className="text-sm font-bold text-neutral-800">Tutorial do Cliente</h4>
+                        <p className="text-[11px] text-neutral-500 font-medium">Como agendar um serviço em segundos</p>
+                      </div>
+                    </div>
+                    <div className="w-full aspect-video rounded-2xl overflow-hidden shadow-inner border border-black/5 bg-black/5 relative">
+                      <iframe
+                        className="absolute inset-0 w-full h-full"
+                        src="https://www.youtube.com/embed/oZ6y6l2-nUk"
+                        title="Tutorial do Cliente - BeautyFreelas"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowFullScreen
+                      ></iframe>
+                    </div>
+                  </div>
+                ) : (
+                  /* Professional Video */
+                  <div className="bg-white/40 backdrop-blur-md rounded-3xl p-5 md:p-6 border border-white/60 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col">
+                    <div className="flex items-center justify-center gap-2.5 mb-4">
+                      <div className="p-2 bg-blue-50 rounded-xl text-blue-500">
+                        <Scissors className="h-4 w-4" />
+                      </div>
+                      <div className="text-left">
+                        <h4 className="text-sm font-bold text-neutral-800">Tutorial do Profissional</h4>
+                        <p className="text-[11px] text-neutral-500 font-medium">Como criar sua conta e configurar seu link</p>
+                      </div>
+                    </div>
+                    <div className="w-full aspect-video rounded-2xl overflow-hidden shadow-inner border border-black/5 bg-black/5 relative">
+                      <iframe
+                        className="absolute inset-0 w-full h-full"
+                        src="https://www.youtube.com/embed/rBWUCO5YctQ"
+                        title="Tutorial do Profissional - BeautyFreelas"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowFullScreen
+                      ></iframe>
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </section>

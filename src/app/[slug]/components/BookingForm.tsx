@@ -277,24 +277,26 @@ export default function BookingForm({ professional }: BookingFormProps) {
           
           <div className="space-y-6">
             <p className="text-[10px] font-black uppercase tracking-[0.2em] text-neutral-400">Horários Disponíveis</p>
-            <div className={`grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-2 gap-3 ${availableTimeSlots.length === 0 ? "opacity-50" : ""}`}>
-              {availableTimeSlots.length > 0 ? availableTimeSlots.map((t) => (
-                <button
-                  key={t}
-                  onClick={() => setSelectedTime(t)}
-                  className={`py-3 px-4 rounded-2xl text-sm font-bold transition-all duration-300 ${
-                    selectedTime === t 
-                    ? "bg-black text-white shadow-button scale-105" 
-                    : "bg-white/50 text-neutral-600 hover:bg-white shadow-sm"
-                  }`}
-                >
-                  {t}
-                </button>
-              )) : (
-                <div className="col-span-full text-center text-sm font-semibold text-neutral-400 py-4">
-                  Nenhum horário disponível para esta data.
-                </div>
-              )}
+            <div className="max-h-[280px] overflow-y-auto rounded-2xl time-slots-scroll p-2">
+              <div className={`grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-2 gap-3 ${availableTimeSlots.length === 0 ? "opacity-50" : ""}`}>
+                {availableTimeSlots.length > 0 ? availableTimeSlots.map((t) => (
+                  <button
+                    key={t}
+                    onClick={() => setSelectedTime(t)}
+                    className={`py-3 px-4 rounded-2xl text-sm font-bold transition-all duration-300 ${
+                      selectedTime === t 
+                      ? "bg-black text-white shadow-button scale-105" 
+                      : "bg-white/50 text-neutral-600 hover:bg-white shadow-sm"
+                    }`}
+                  >
+                    {t}
+                  </button>
+                )) : (
+                  <div className="col-span-full text-center text-sm font-semibold text-neutral-400 py-4">
+                    Nenhum horário disponível para esta data.
+                  </div>
+                )}
+              </div>
             </div>
 
             <div className="pt-6 flex gap-3 sm:gap-4">
