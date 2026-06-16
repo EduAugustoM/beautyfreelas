@@ -11,6 +11,7 @@ import {
   signOut as firebaseSignOut,
 } from "firebase/auth";
 import { auth } from "@/lib/firebase";
+import { toast } from "sonner";
 
 interface AuthContextType {
   user: User | null;
@@ -36,6 +37,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       // Only log non-null errors (null means no redirect result pending)
       if (error) {
         console.error("Error processing redirect sign-in:", error);
+        
+        let message = "Falha ao completar a autenticação via redirecionamento.";
+        if (error.code === "auth/redirect-cancelled-by-user") {
+          message = "O login foi cancelado pelo usuário.";
+        } else if (error.code === "auth/network-request-failed") {
+          message = "Erro de rede ao se conectar ao servidor de autenticação.";
+        } else if (error.code === "auth/operation-not-allowed") {
+          message = "Esta operação de login não está ativa. Contate o suporte.";
+        } else if (error.code === "auth/internal-error") {
+          message = "Ocorreu um erro interno na autenticação. Tente novamente.";
+        }
+        
+        toast.error(message);
       }
     });
 
@@ -49,11 +63,24 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const signInWithGoogle = async () => {
     const provider = new GoogleAuthProvider();
+    
+    // Force redirect flow on mobile devices. Popups are aggressively blocked
+    // on mobile Safari/Chrome, and redirect offers a better user experience.
+    const isMobile = typeof window !== "undefined" && 
+      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+    if (isMobile) {
+      try {
+        await signInWithRedirect(auth, provider);
+      } catch (error) {
+        console.error("Error launching mobile Google sign-in redirect:", error);
+        toast.error("Erro ao iniciar login. Tente novamente ou verifique as permissões de cookies.");
+        throw error;
+      }
+      return;
+    }
+
     try {
-      // Use signInWithPopup by default for both desktop and mobile devices.
-      // signInWithRedirect is blocked on many mobile browsers (like Safari and Chrome on iOS)
-      // due to third-party cookie restrictions (ITP). signInWithPopup works when triggered
-      // by a direct user gesture (button click).
       await signInWithPopup(auth, provider);
     } catch (error: unknown) {
       // If popup was blocked (e.g., in-app webview or specific browser settings), fall back to redirect
@@ -62,10 +89,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         "code" in error &&
         (error as { code: string }).code === "auth/popup-blocked"
       ) {
-        await signInWithRedirect(auth, provider);
+        try {
+          await signInWithRedirect(auth, provider);
+        } catch (redirectError) {
+          console.error("Error falling back to redirect:", redirectError);
+          toast.error("O popup de login foi bloqueado e o redirecionamento falhou.");
+          throw redirectError;
+        }
         return;
       }
       console.error("Error signing in with Google:", error);
+      toast.error("Erro ao entrar com o Google. Tente novamente.");
       throw error;
     }
   };

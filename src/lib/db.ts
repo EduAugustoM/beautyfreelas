@@ -71,7 +71,8 @@ export const getProfessionalBySlug = async (
     );
     const snap = await getDocs(q);
     if (snap.empty) return null;
-    const data = snap.docs[0].data() as Professional;
+    const docSnap = snap.docs[0];
+    const data = { uid: docSnap.id, ...docSnap.data() } as Professional;
     cacheSet(cacheKey, data, 300); // 5 minutes
     return data;
   } catch (error) {
@@ -92,7 +93,7 @@ export const getAllProfessionals = async (): Promise<Professional[]> => {
   try {
     const q = query(collection(db, "professionals"), limit(100));
     const snap = await getDocs(q);
-    const data = snap.docs.map((d) => d.data() as Professional);
+    const data = snap.docs.map((d) => ({ uid: d.id, ...d.data() } as Professional));
     cacheSet(cacheKey, data, 120); // 2 minutes
     return data;
   } catch (error) {
@@ -116,7 +117,7 @@ export const getProfessionalById = async (
     const docRef = doc(db, "professionals", uid);
     const snap = await getDoc(docRef);
     if (!snap.exists()) return null;
-    const data = snap.data() as Professional;
+    const data = { uid: snap.id, ...snap.data() } as Professional;
     cacheSet(cacheKey, data, 300);
     return data;
   } catch (error) {
